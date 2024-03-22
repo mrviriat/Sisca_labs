@@ -18,22 +18,22 @@ class Program
             //Console.ForegroundColor = ConsoleColor.r
 
 
-            var mainconfig = new MainConfigurator(4100, 17000);
-            mainconfig.Show();
-
-            var VA_space = new VA(mainconfig.Get_Page_Size(), mainconfig.Get_Number_of_VA_Pages());
-
-            var mmu = new MMU(mainconfig.Get_Number_of_RAM_Pages(), mainconfig.Get_Number_of_VA_Pages(), mainconfig.Get_Page_Size(), VA_space.Get_VA_Array());
-            mmu.addAddr(20000);
-
-            mmu.show_PAGE_TABLE(true);
-            mmu.createColorRelation();
-
-            var ram = new RAM(mainconfig.Get_Page_Size(), mainconfig.Get_Number_of_RAM_Pages(), mmu.get_Page_table(), VA_space.Get_VA_Array());
-            mmu.setRAMAddr(ram.getRAMAddr());
-
-            mmu.show_VA_FULL();
-            mmu.show_RAM();
+            // var mainconfig = new MainConfigurator(4100, 17000);
+            // mainconfig.Show();
+            //
+            // var VA_space = new VA(mainconfig.Get_Page_Size(), mainconfig.Get_Number_of_VA_Pages());
+            //
+            // var mmu = new MMU(mainconfig.Get_Number_of_RAM_Pages(), mainconfig.Get_Number_of_VA_Pages(), mainconfig.Get_Page_Size(), VA_space.Get_VA_Array());
+            // mmu.addAddr(20000);
+            //
+            // mmu.show_PAGE_TABLE(true);
+            // mmu.createColorRelation();
+            //
+            // var ram = new RAM(mainconfig.Get_Page_Size(), mainconfig.Get_Number_of_RAM_Pages(), mmu.get_Page_table(), VA_space.Get_VA_Array());
+            // mmu.setRAMAddr(ram.getRAMAddr());
+            //
+            // mmu.show_VA_FULL();
+            // mmu.show_RAM();
 
         }
     }

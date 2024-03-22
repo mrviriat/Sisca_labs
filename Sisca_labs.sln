@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary", "ClassLibrar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToTemperatureDatabase", "ConnectToTemperatureDatabase\ConnectToTemperatureDatabase.csproj", "{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi", "WeatherApi\WeatherApi.csproj", "{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApi", "WeatherApi\WeatherApi.csproj", "{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportExcelToAzimut", "ImportExcelToAzimut\ImportExcelToAzimut.csproj", "{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
