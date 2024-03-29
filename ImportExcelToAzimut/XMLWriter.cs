@@ -2,7 +2,6 @@
 
 namespace ImportExcelToAzimut;
 
-
 public static class XMLWriter
 {
     public static void WriteIntoXmlFromString(string xmlString, string pathToFile)
@@ -20,6 +19,5 @@ public static class XMLWriter
         {
             Console.WriteLine($"Ошибка при сохранении XML файла: {ex.Message}");
         }
-
     }
 }

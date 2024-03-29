@@ -1,12 +1,16 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using System;
+using ExcelDataReader;
+using System.Data;
+using System.IO;
 
 namespace ImportExcelToAzimut;
 
 public class BDEditor
 {
-    
-    static string _configurationData = "database=azimut;User=azimut;Password=_azimut#;Role=RL1;Dialect=3;Server=192.168.1.112;Port=3050;Charset=WIN1251";
-    
+    static string _configurationData =
+        "database=azimut;User=azimut;Password=_azimut#;Role=RL1;Dialect=3;Server=192.168.1.112;Port=3050;Charset=WIN1251";
+
     public void AddNewItemToXmlobjectsTable(int itemId, string xmlString)
     {
         using (FbConnection connection = new FbConnection(_configurationData))
@@ -129,4 +133,139 @@ public class BDEditor
             }
         }
     }
+
+    public void GetPointsNames(List<string> routeNames)
+    {
+        // using (FbConnection connection = new FbConnection(_configurationData))
+        // {
+        //     connection.Open();
+        //
+        //     FbTransaction transaction = connection.BeginTransaction();
+        //     try
+        //     {
+        //         string query = "SELECT * FROM WPT WHERE WPT_NAME IN (";
+        //         
+        //         for (int i = 0; i < routeNames.Length; i++)
+        //         {
+        //             query += "@RouteName" + i;
+        //             if (i < routeNames.Length - 1)
+        //                 query += ",";
+        //         }
+        //         
+        //         query += ")";
+        //
+        //         using (FbCommand command = new FbCommand(query, connection, transaction))
+        //         {
+        //             for (int i = 0; i < routeNames.Length; i++)
+        //             {
+        //                 command.Parameters.AddWithValue("@RouteName" + i, routeNames[i]);
+        //             }
+        //
+        //             using (FbDataReader reader = command.ExecuteReader())
+        //             {
+        //                 while (reader.Read())
+        //                 {
+        //                     Console.WriteLine("WPT_ID: {0}, WPT_NAME: {1}",  // Обработка результатов запроса
+        //                         reader["WPT_ID"], reader["WPT_NAME"]);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex) // Если возникла ошибка, откатываем транзакцию
+        //     {
+        //         transaction.Rollback();
+        //         Console.WriteLine($"Ошибка при чтении записией: " + ex.Message);
+        //     }
+        // }
+
+        using (FbConnection connection = new FbConnection(_configurationData))
+        {
+            connection.Open();
+
+            FbTransaction transaction = connection.BeginTransaction();
+            try
+            {
+                // // Создаем строку-шаблон для оператора LIKE
+                // string parameterPlaceholders = string.Join(" OR ", routeNames.Select((s, i) => "WPT_NAME LIKE @p" + i));
+                //
+                // // Создаем команду для выполнения SQL-запроса с использованием оператора LIKE
+                // FbCommand cmdp = new FbCommand($"SELECT * FROM WPT WHERE {parameterPlaceholders}", fbtr, fbTransop);
+                //
+                //
+                // for (int i = 0; i < routeNames.Length; i++)
+                // {
+                //     cmdp.Parameters.AddWithValue($"@p{i}", $"%{routeNames[i]}%");
+                // }
+
+                foreach (string searchRoute in routeNames)
+                {
+                    // Создаем команду для выполнения SQL-запроса с использованием оператора LIKE
+                    FbCommand command = new FbCommand("SELECT * FROM WPT WHERE WPT_NAME LIKE @searchRoute", connection, transaction);
+                    
+                    command.Parameters.AddWithValue("@searchRoute", $"%{searchRoute}%");
+
+                    using (FbDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", reader["WPT_ID"], reader["WPT_NAME"]);  // Выводим значения всех столбцов данной строки
+                        }
+
+                        Console.WriteLine("===============================");
+                    }
+                }
+            }
+            finally
+            {
+                transaction.Commit();  // Завершаем транзакцию
+            }
+        }
+    }
+    
+    public void ReadExcelBook(string filePath, string sheetName, ref List<string> list1, ref List<string> list2)
+    {
+        using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+        {
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
+            {
+                reader.NextResult();
+                reader.NextResult();
+                
+                while (reader.Read()) // Читаем построчно
+                {
+                    // Начинаем с третьей строки, игнорируя первые две
+                    if (reader.Depth >= 2)
+                    {
+                        if (reader[0] != null && !string.IsNullOrWhiteSpace(reader.GetString(0)))
+                        {
+                            string route = reader.GetString(0).TrimEnd() + " (";
+                            // Console.WriteLine($"'{route}'"); // Выводим данные строки в консоль
+                            list1.Add(route);
+                        }
+                        else // Если строка пустая, прерываем цикл
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                reader.Read();
+                
+                while (reader.Read()) // Читаем построчно
+                {
+                    if (reader[0] != null && !string.IsNullOrWhiteSpace(reader.GetString(0)))
+                    {
+                        string route = reader.GetString(0).TrimEnd() + " (";
+                        // Console.WriteLine($"'{route}''"); // Выводим данные строки в консоль
+                        list2.Add(route);
+                    }
+                    else // Если строка пустая, прерываем цикл
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
 }
