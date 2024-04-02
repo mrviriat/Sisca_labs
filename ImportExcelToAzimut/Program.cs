@@ -31,6 +31,8 @@ internal class Program
 
         // bdEditor.GetPointsNames(routeNames);
 
+        
+        
         List<string> list1 = new List<string>();
         List<string> list2 = new List<string>();
 
@@ -39,7 +41,14 @@ internal class Program
             ref list1,
             ref list2);
         
-        bdEditor.GetPointsNames(list1);
-        bdEditor.GetPointsNames(list2);
+        // bdEditor.GetPointsNames(list1);
+        // bdEditor.GetPointsNames(list2);
+
+        List<int> routesIndexes = bdEditor.ReadExcelForRotes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls");
+
+        foreach (var index in routesIndexes)
+        {
+            Console.Write($"{index} ");
+        }
     }
 }

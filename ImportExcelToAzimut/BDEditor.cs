@@ -267,5 +267,58 @@ public class BDEditor
             }
         }
     }
+    
+    public List<int> ReadExcelForRotes(string filePath)
+    {
+        List<int> routesIndexes = new List<int>();
+        
+        using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+        {
+            // using (var reader = ExcelReaderFactory.CreateReader(stream))
+            // {
+            //     while (reader.Read()) // Читаем построчно
+            //     {
+            //         if (reader.GetString(1) == "АП г. Гродно")
+            //         {
+            //             routesIndexes.Add(reader.Depth+1);
+            //             Console.WriteLine($"{reader.Depth+1}: {reader.GetString(1)}");
+            //         }
+            //     }
+            // }
+            
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
+            {
+                reader.Read(); 
+                reader.Read(); 
+                reader.Read(); 
+                reader.Read();
+                reader.Read(); 
+                
+                var valueC5 = reader.GetValue(2); // 0 - индекс колонки A
+                
+                Console.WriteLine("Значение из ячейки С5: " + valueC5.ToString());
+                
+                reader.Reset();
+                
+                reader.Read(); 
+                reader.Read(); 
+                reader.Read(); 
+                reader.Read();
+                reader.Read(); 
+                reader.Read(); 
+                reader.Read();
+                reader.Read();
+                
+                var valueC8 = reader.GetValue(2); // 0 - индекс колонки A
+                
+                Console.WriteLine("Значение из ячейки С8: " + valueC8.ToString());
+                
+                reader.Reset();
+            }
+            
+        }
+
+        return routesIndexes;
+    }
 
 }
