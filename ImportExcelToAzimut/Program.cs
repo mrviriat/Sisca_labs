@@ -44,11 +44,13 @@ internal class Program
         // bdEditor.GetPointsNames(list1);
         // bdEditor.GetPointsNames(list2);
 
-        List<int> routesIndexes = bdEditor.ReadExcelForRotes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls");
+        // List<int> routesIndexes = bdEditor.ReadExcelForRotes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls");
+        //
+        // foreach (var index in routesIndexes)
+        // {
+        //     Console.Write($"{index} ");
+        // }
+        bdEditor.ReadExcelForAllTimes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xlsx");
 
-        foreach (var index in routesIndexes)
-        {
-            Console.Write($"{index} ");
-        }
     }
 }

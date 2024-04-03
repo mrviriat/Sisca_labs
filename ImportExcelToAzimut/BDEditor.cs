@@ -1,6 +1,7 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using System;
 using ExcelDataReader;
+using OfficeOpenXml;
 using System.Data;
 using System.IO;
 
@@ -274,51 +275,108 @@ public class BDEditor
         
         using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
         {
-            // using (var reader = ExcelReaderFactory.CreateReader(stream))
-            // {
-            //     while (reader.Read()) // Читаем построчно
-            //     {
-            //         if (reader.GetString(1) == "АП г. Гродно")
-            //         {
-            //             routesIndexes.Add(reader.Depth+1);
-            //             Console.WriteLine($"{reader.Depth+1}: {reader.GetString(1)}");
-            //         }
-            //     }
-            // }
-            
             using (var reader = ExcelReaderFactory.CreateReader(stream))
             {
-                reader.Read(); 
-                reader.Read(); 
-                reader.Read(); 
-                reader.Read();
-                reader.Read(); 
-                
-                var valueC5 = reader.GetValue(2); // 0 - индекс колонки A
-                
-                Console.WriteLine("Значение из ячейки С5: " + valueC5.ToString());
-                
-                reader.Reset();
-                
-                reader.Read(); 
-                reader.Read(); 
-                reader.Read(); 
-                reader.Read();
-                reader.Read(); 
-                reader.Read(); 
-                reader.Read();
-                reader.Read();
-                
-                var valueC8 = reader.GetValue(2); // 0 - индекс колонки A
-                
-                Console.WriteLine("Значение из ячейки С8: " + valueC8.ToString());
-                
-                reader.Reset();
+                while (reader.Read()) // Читаем построчно
+                {
+                    if (reader.GetString(1) == "АП г. Гродно")
+                    {
+                        routesIndexes.Add(reader.Depth+1);
+                        Console.WriteLine($"{reader.Depth+1}: {reader.GetString(1)}");
+                    }
+                }
             }
-            
         }
 
         return routesIndexes;
+    }
+
+    public string convertStringToDate(string timeString )
+    {
+        // Разделение строки на часы и минуты
+        string[] timeParts = timeString.Split(':');
+
+        // Получение часов и минут из строки
+        int hours = int.Parse(timeParts[0]);
+        int minutes = int.Parse(timeParts[1]);
+
+        // Создание объекта DateTime с датой 30 декабря 1899 года и указанием времени
+        DateTime time = new DateTime(1899, 12, 30, hours, minutes, 0);
+
+        // Форматирование объекта DateTime в строку в нужном формате
+        string formattedTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
+
+        return formattedTime;
+    }
+    
+    public void ReadExcelForAllTimes(string filePath)
+    {
+        List<int> routesIndexes = ReadExcelForRotes(filePath);
+        List<int> parkEndTimeRows = new List<int>();
+        
+        int vihod = 1;
+        
+        using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))  // Открываем файл Excel с помощью EPPlus
+        {
+            ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Получаем первый лист в книге
+
+            int row = vihod * 2 - 1;
+            
+            for (int i = 1; i < 50; i++)
+            {
+                if (worksheet.Cells[routesIndexes[row], i].Text.Length > 0 &&
+                    worksheet.Cells[routesIndexes[row], i].Text.Length <= 5)
+                {
+                    parkEndTimeRows.Add(i);
+                    // Console.WriteLine(worksheet.Cells[routesIndexes[row], i].Text);
+                    // Console.WriteLine($"Строка - {routesIndexes[row]}");
+                    // Console.WriteLine($"Колонка - {i}");
+                }
+            }
+        }
+        
+        using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))  // Открываем файл Excel с помощью EPPlus
+        {
+            ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Получаем первый лист в книге
+
+            int indexOfRowOfTimeStart = vihod * 2 - 2;
+            int indexOfRowOfTimeEnd = vihod * 2 - 1;
+            
+            int middleRow = (routesIndexes[indexOfRowOfTimeEnd] - routesIndexes[indexOfRowOfTimeStart]) / 2 +
+                            routesIndexes[indexOfRowOfTimeStart];
+            
+            for (int col = 3; col <= parkEndTimeRows[0]; col++)
+            {
+                if (worksheet.Cells[routesIndexes[indexOfRowOfTimeStart] + 1, col].Text == "обед")
+                {
+                    continue;
+                }
+                
+                for (int row = routesIndexes[indexOfRowOfTimeStart] + 1; row < middleRow; row++)
+                {
+                    Console.WriteLine(convertStringToDate(worksheet.Cells[row, col].Text));
+
+                    if (worksheet.Cells[row, col].Style.Font.UnderLine)
+                    {
+                        Console.WriteLine("Конец первой смены");
+                    }
+                }
+
+                Console.WriteLine();
+                
+                for (int row = middleRow + 1; row < routesIndexes[indexOfRowOfTimeEnd]; row++)
+                {
+                    Console.WriteLine(convertStringToDate(worksheet.Cells[row, col].Text));
+                    
+                    if (worksheet.Cells[row, col].Style.Font.UnderLine)
+                    {
+                        Console.WriteLine("Конец первой смены");
+                    }
+                }
+                
+                Console.WriteLine();
+            }
+        }
     }
 
 }
