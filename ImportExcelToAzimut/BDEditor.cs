@@ -4,10 +4,12 @@ using ExcelDataReader;
 using OfficeOpenXml;
 using System.Data;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace ImportExcelToAzimut;
 
-public class BDEditor
+public class BdEditor
 {
     static string _configurationData =
         "database=azimut;User=azimut;Password=_azimut#;Role=RL1;Dialect=3;Server=192.168.1.112;Port=3050;Charset=WIN1251";
@@ -120,7 +122,7 @@ public class BDEditor
                     }
 
                     XMLWriter.WriteIntoXmlFromString((string)reader[8],
-                        @"C:\Users\a.gavrilenko\Desktop\FileWith55Data.xml");
+                        @"C:\Users\a.gavrilenko\Desktop\FileWith14Data.xml");
                 }
 
                 reader.Close();
@@ -135,7 +137,7 @@ public class BDEditor
         }
     }
 
-    public void GetPointsNames(List<string> routeNames)
+    public void GetPointsNames(List<string> routeNames, ref List<WPT_Route> finishRoutes)
     {
         // using (FbConnection connection = new FbConnection(_configurationData))
         // {
@@ -198,23 +200,96 @@ public class BDEditor
                 //     cmdp.Parameters.AddWithValue($"@p{i}", $"%{routeNames[i]}%");
                 // }
 
-                foreach (string searchRoute in routeNames)
+                for (int i = 0; i < routeNames.Count; i++)
                 {
+                    string searchRoute;
+
+                    if (i == routeNames.Count - 1)
+                    {
+                        
+                        searchRoute = routeNames[i];
+                    }
+                    else
+                    {
+                        string pattern = @"\s*\([^)]*\)";
+                        
+                        string routeNameWithoutLastPart = Regex.Replace(routeNames[i + 1], pattern, "");  // Удаляем найденный текст
+                        
+                        searchRoute = $"{routeNames[i]} ({routeNameWithoutLastPart})";
+                    }
+                    
                     // Создаем команду для выполнения SQL-запроса с использованием оператора LIKE
                     FbCommand command = new FbCommand("SELECT * FROM WPT WHERE WPT_NAME LIKE @searchRoute", connection, transaction);
                     
                     command.Parameters.AddWithValue("@searchRoute", $"%{searchRoute}%");
 
+
+                    string result = "";
+                        
                     using (FbDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", reader["WPT_ID"], reader["WPT_NAME"]);  // Выводим значения всех столбцов данной строки
+                            if (Convert.ToInt32(reader["WPT_ID"]) == 473)
+                            {
+                                continue;
+                            }
+                            
+                            result = $"WPT_ID: {reader["WPT_ID"]}, WPT_NAME: {reader["WPT_NAME"]}";
+                            Console.WriteLine(result);
+                            finishRoutes.Add(new WPT_Route(Convert.ToString(reader["WPT_ID"]), Convert.ToString(reader["WPT_NAME"])));
+                            
+                            // Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", reader["WPT_ID"], reader["WPT_NAME"]);  // Выводим значения всех столбцов данной строки
                         }
 
-                        Console.WriteLine("===============================");
+                        if (result != "")
+                        {
+                            Console.WriteLine("===============================");
+                        }
                     }
+
+                    if (result == "")
+                    {
+                        string searchRoutee = routeNames[i];
+                        FbCommand commandd = new FbCommand("SELECT * FROM WPT WHERE WPT_NAME LIKE @searchRoutee", connection, transaction);
+                    
+                        commandd.Parameters.AddWithValue("@searchRoutee", $"%{searchRoutee}%");
+                        
+                        using (FbDataReader readerr = commandd.ExecuteReader())
+                        {
+                            while (readerr.Read())
+                            {
+                                if (Convert.ToInt32(readerr["WPT_ID"]) == 473)
+                                {
+                                    continue;
+                                }
+                                
+                                Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", readerr["WPT_ID"], readerr["WPT_NAME"]);  // Выводим значения всех столбцов данной строки
+                                finishRoutes.Add(new WPT_Route(Convert.ToString(readerr["WPT_ID"]), Convert.ToString(readerr["WPT_NAME"])));                            }
+
+                            Console.WriteLine("===============================");
+                        }
+                    }
+                    
                 }
+
+                // foreach (string searchRoute in routeNames)
+                // {
+                //     // Создаем команду для выполнения SQL-запроса с использованием оператора LIKE
+                //     FbCommand command = new FbCommand("SELECT * FROM WPT WHERE WPT_NAME LIKE @searchRoute", connection, transaction);
+                //     
+                //     command.Parameters.AddWithValue("@searchRoute", $"%{searchRoute}%");
+                //
+                //     using (FbDataReader reader = command.ExecuteReader())
+                //     {
+                //         while (reader.Read())
+                //         {
+                //             Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", reader["WPT_ID"], reader["WPT_NAME"]);  // Выводим значения всех столбцов данной строки
+                //         }
+                //
+                //         Console.WriteLine("===============================");
+                //     }
+                // }
             }
             finally
             {
@@ -239,7 +314,7 @@ public class BDEditor
                     {
                         if (reader[0] != null && !string.IsNullOrWhiteSpace(reader.GetString(0)))
                         {
-                            string route = reader.GetString(0).TrimEnd() + " (";
+                            string route = reader.GetString(0).TrimEnd();
                             // Console.WriteLine($"'{route}'"); // Выводим данные строки в консоль
                             list1.Add(route);
                         }
@@ -256,7 +331,7 @@ public class BDEditor
                 {
                     if (reader[0] != null && !string.IsNullOrWhiteSpace(reader.GetString(0)))
                     {
-                        string route = reader.GetString(0).TrimEnd() + " (";
+                        string route = reader.GetString(0).TrimEnd();
                         // Console.WriteLine($"'{route}''"); // Выводим данные строки в консоль
                         list2.Add(route);
                     }
@@ -291,22 +366,25 @@ public class BDEditor
         return routesIndexes;
     }
 
-    public string convertStringToDate(string timeString )
+    private string ConvertStringToDate(string timeString )
     {
-        // Разделение строки на часы и минуты
-        string[] timeParts = timeString.Split(':');
-
-        // Получение часов и минут из строки
-        int hours = int.Parse(timeParts[0]);
+        string[] timeParts = timeString.Split(':');  // Разделение строки на часы и минуты
+        
+        int hours = int.Parse(timeParts[0]);  // Получение часов и минут из строки
         int minutes = int.Parse(timeParts[1]);
 
-        // Создание объекта DateTime с датой 30 декабря 1899 года и указанием времени
-        DateTime time = new DateTime(1899, 12, 30, hours, minutes, 0);
-
-        // Форматирование объекта DateTime в строку в нужном формате
-        string formattedTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
-
-        return formattedTime;
+        string time;
+        
+        if (hours < 4)  // Создание объекта DateTime с датой 30/31 декабря 1899 года и указанием времени
+        {
+            time = $"1899-12-31T{hours}-{minutes}-00";
+        }
+        else
+        {
+            time = $"1899-12-30T{hours}-{minutes}-00";
+        }
+        
+        return time;
     }
     
     public void ReadExcelForAllTimes(string filePath)
@@ -354,7 +432,7 @@ public class BDEditor
                 
                 for (int row = routesIndexes[indexOfRowOfTimeStart] + 1; row < middleRow; row++)
                 {
-                    Console.WriteLine(convertStringToDate(worksheet.Cells[row, col].Text));
+                    Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
 
                     if (worksheet.Cells[row, col].Style.Font.UnderLine)
                     {
@@ -366,7 +444,7 @@ public class BDEditor
                 
                 for (int row = middleRow + 1; row < routesIndexes[indexOfRowOfTimeEnd]; row++)
                 {
-                    Console.WriteLine(convertStringToDate(worksheet.Cells[row, col].Text));
+                    Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
                     
                     if (worksheet.Cells[row, col].Style.Font.UnderLine)
                     {
