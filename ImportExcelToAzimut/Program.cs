@@ -18,7 +18,9 @@ internal class Program
         //bdEditor.AddNewItemToRoutsTable(ItemID, "0", "351", "1111", "1111", "1", "1", "0");
         // bdEditor.ReadtFromTbaleByColumnName("XMLOBJECTS", "XMLOBJ_ID", 8_624_780);
         
-        bdEditor.ReadtFromTbaleByColumnName("XMLOBJECTS", "XMLOBJ_ID", 10_000_014);
+        
+        
+        // bdEditor.ReadtFromTbaleByColumnName("XMLOBJECTS", "XMLOBJ_ID", 10_000_014);
        
         
 
@@ -33,22 +35,38 @@ internal class Program
         //     "разбивка", 
         //     ref list1,
         //     ref list2);
+
+        string workComputerDirectory = @"C:\Users\a.gavrilenko\Desktop";
+        string homeComputerDirectory = @"C:\Users\kazak\OneDrive\Рабочий стол";
         
-        bdEditor.ReadExcelBook(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls", 
+        bdEditor.ReadExcelBook(homeComputerDirectory + @"\6 с 01.03.2024.xls", 
             "разбивка", 
             ref list1,
             ref list2);
-        
+
+        // int vihodNUmber = 2;
+        // int smenaNumber = 1;
+        Console.Write("Введите номер выхода, по которому должна быть составлена карточка: ");
+        int vihodNUmber = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Введите номер смены: ");
+        int smenaNumber = Convert.ToInt32(Console.ReadLine());
         
         List<WPT_Route> forwardRoutes = new List<WPT_Route>();
         List<WPT_Route> backwardRoutes = new List<WPT_Route>();
         
-        bdEditor.GetPointsNames(list1, ref forwardRoutes);
-        Console.WriteLine("Конец");
-        Console.WriteLine("Конец");
-        bdEditor.GetPointsNames(list2, ref backwardRoutes);
-
-        XmlDocument doc = WriteXMLToAzimut(forwardRoutes, backwardRoutes);
+        // XmlDocument doc = WriteXMLToAzimut(forwardRoutes, backwardRoutes);
+        XmlDocument doc = new XmlDocument();
+        
+        bdEditor.ReadExcelForAllTimes(homeComputerDirectory + @"\6 с 01.03.2024.xlsx", 
+            vihodNUmber, 
+            smenaNumber, 
+            forwardRoutes, 
+            backwardRoutes,
+            ref doc
+            );
+        
+        XMLWriter.WriteIntoXmlFromString(doc, homeComputerDirectory + @"\только_что.xml");
+        
         string xmlString;
         
         using (StringWriter sw = new StringWriter())
@@ -59,30 +77,51 @@ internal class Program
         }
         
         // Console.WriteLine(xmlString);
+        return;
         
-        int itemId = 10_000_014;
-        
-        // bdEditor.AddNewItemToXmlobjectsTable(itemId, xmlString);
-        // bdEditor.AddNewItemToRoutsTable(
-        //     itemId, 
-        //     "0", 
-        //     "133", 
-        //     "006 кастомный", 
-        //     "6 кастомный", 
-        //     "1", 
-        //     "1", 
-        //     "комментарий");
-        
-        // Console.WriteLine(forwardRoutes.Count);
-        // Console.WriteLine(backwardRoutes.Count);
-        
-        // List<int> routesIndexes = bdEditor.ReadExcelForRotes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls");
+        // // List<WPT_Route> forwardRoutes = new List<WPT_Route>();
+        // // List<WPT_Route> backwardRoutes = new List<WPT_Route>();
         //
-        // foreach (var index in routesIndexes)
+        // bdEditor.GetPointsNames(list1, ref forwardRoutes);
+        // Console.WriteLine("Конец");
+        // Console.WriteLine("Конец");
+        // bdEditor.GetPointsNames(list2, ref backwardRoutes);
+        //
+        // XmlDocument doc = WriteXMLToAzimut(forwardRoutes, backwardRoutes);
+        // string xmlString;
+        //
+        // using (StringWriter sw = new StringWriter())
         // {
-        //     Console.Write($"{index} ");
+        //     XmlTextWriter xw = new XmlTextWriter(sw);
+        //     doc.WriteTo(xw);
+        //     xmlString = sw.ToString();
         // }
-        // bdEditor.ReadExcelForAllTimes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xlsx");
+        //
+        // // Console.WriteLine(xmlString);
+        //
+        // int itemId = 10_000_014;
+        //
+        // // bdEditor.AddNewItemToXmlobjectsTable(itemId, xmlString);
+        // // bdEditor.AddNewItemToRoutsTable(
+        // //     itemId, 
+        // //     "0", 
+        // //     "133", 
+        // //     "006 кастомный", 
+        // //     "6 кастомный", 
+        // //     "1", 
+        // //     "1", 
+        // //     "комментарий");
+        //
+        // // Console.WriteLine(forwardRoutes.Count);
+        // // Console.WriteLine(backwardRoutes.Count);
+        //
+        // // List<int> routesIndexes = bdEditor.ReadExcelForRotes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xls");
+        // //
+        // // foreach (var index in routesIndexes)
+        // // {
+        // //     Console.Write($"{index} ");
+        // // }
+        // bdEditor.ReadExcelForAllTimes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xlsx", vihodNUmber, smenaNumber);
     }
     
     static XmlDocument WriteXMLToAzimut(List<WPT_Route> forwardRoutes, List<WPT_Route> backwardRoutes)
