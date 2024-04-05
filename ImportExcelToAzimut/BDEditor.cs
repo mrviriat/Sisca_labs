@@ -237,7 +237,7 @@ public class BdEditor
                             }
 
                             result = $"WPT_ID: {reader["WPT_ID"]}, WPT_NAME: {reader["WPT_NAME"]}";
-                            Console.WriteLine(result);
+                            // Console.WriteLine(result);
                             finishRoutes.Add(new WPT_Route(Convert.ToString(reader["WPT_ID"]),
                                 Convert.ToString(reader["WPT_NAME"])));
 
@@ -246,7 +246,7 @@ public class BdEditor
 
                         if (result != "")
                         {
-                            Console.WriteLine("===============================");
+                            // Console.WriteLine("===============================");
                         }
                     }
 
@@ -267,13 +267,12 @@ public class BdEditor
                                     continue;
                                 }
 
-                                Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", readerr["WPT_ID"],
-                                    readerr["WPT_NAME"]); // Выводим значения всех столбцов данной строки
+                                // Console.WriteLine("WPT_ID: {0}, WPT_NAME: \"{1}\"", readerr["WPT_ID"], readerr["WPT_NAME"]); // Выводим значения всех столбцов данной строки
                                 finishRoutes.Add(new WPT_Route(Convert.ToString(readerr["WPT_ID"]),
                                     Convert.ToString(readerr["WPT_NAME"])));
                             }
 
-                            Console.WriteLine("===============================");
+                            // Console.WriteLine("===============================");
                         }
                     }
                 }
@@ -362,7 +361,7 @@ public class BdEditor
                     if (reader.GetString(1) == "АП г. Гродно")
                     {
                         routesIndexes.Add(reader.Depth + 1);
-                        Console.WriteLine($"{reader.Depth + 1}: {reader.GetString(1)}");
+                        // Console.WriteLine($"{reader.Depth + 1}: {reader.GetString(1)}");
                     }
                 }
             }
@@ -523,9 +522,9 @@ public class BdEditor
                     worksheet.Cells[viezdZezdVGaragePoVihodam[row], i].Text.Length <= 5)
                 {
                     parkEndTimeRows.Add(i);
-                    Console.WriteLine(worksheet.Cells[viezdZezdVGaragePoVihodam[row], i].Text);
-                    Console.WriteLine($"Строка - {viezdZezdVGaragePoVihodam[row]}");
-                    Console.WriteLine($"Колонка - {i}");
+                    // Console.WriteLine(worksheet.Cells[viezdZezdVGaragePoVihodam[row], i].Text);
+                    // Console.WriteLine($"Строка - {viezdZezdVGaragePoVihodam[row]}");
+                    // Console.WriteLine($"Колонка - {i}");
                 }
             }
         }
@@ -568,7 +567,7 @@ public class BdEditor
                     int firstStart = viezdZezdVGaragePoVihodam[indexOfRowOfTimeStart] + 1;
                     for (int row = firstStart; row < middleRow; row++)
                     {
-                        Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
+                        // Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
 
                         // if (worksheet.Cells[row, col].Style.Font.UnderLine)
                         // {
@@ -588,8 +587,7 @@ public class BdEditor
                         }
                     }
 
-                    Console.WriteLine(
-                        $"продолжительность рейса = {firstDiff}, смотрим разбивку по {forwardCollNumberInRazbivka} колонке");
+                    // Console.WriteLine($"продолжительность рейса = {firstDiff}, смотрим разбивку по {forwardCollNumberInRazbivka} колонке");
 
                     string timeString = ConvertStringToDate(worksheet.Cells[firstStart, col].Text);
                     for (int i = 3; i <= 26; i++)
@@ -608,18 +606,18 @@ public class BdEditor
                     
                     if (worksheet.Cells[middleRow - 1, col].Style.Font.UnderLine)
                     {
-                        Console.WriteLine("Конец первой смены");
+                        // Console.WriteLine("Конец первой смены");
                         break;
                     }
 
 
-                    Console.WriteLine();
+                    // Console.WriteLine();
 
 
                     int secondStart = middleRow + 1;
                     for (int row = secondStart; row < viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd]; row++)
                     {
-                        Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
+                        // Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
 
                         // if (worksheet.Cells[row, col].Style.Font.UnderLine)
                         // {
@@ -639,8 +637,7 @@ public class BdEditor
                         }
                     }
 
-                    Console.WriteLine(
-                        $"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
+                    // Console.WriteLine($"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
 
                     timeString = ConvertStringToDate(worksheet.Cells[secondStart, col].Text);
                     for (int i = 29; i <= 50; i++)  // заменить индексы на такие, чтобы программа сама считала
@@ -658,12 +655,12 @@ public class BdEditor
                     }
                     if (worksheet.Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd] - 1, col].Style.Font.UnderLine)
                     {
-                        Console.WriteLine("Конец первой смены");
+                        // Console.WriteLine("Конец первой смены");
                         break;
                     }
 
                     schetchickColonokVAzimut += 1;
-                    Console.WriteLine();
+                    // Console.WriteLine();
                 }
                 else // случай, когда нам нужна вторая смена
                 {
@@ -699,7 +696,7 @@ public class BdEditor
                              row < viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd];
                              row++)
                         {
-                            Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
+                            // Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
                         }
 
                         int diff = CalculateTimeDifferenceInMinutes(worksheet.Cells[startAfterFirstSmena, col].Text,
@@ -714,8 +711,7 @@ public class BdEditor
                             }
                         }
 
-                        Console.WriteLine(
-                            $"продолжительность обратного рейса = {diff}, смотрим разбивку по {collNumberInRazbivka} колонке");
+                        // Console.WriteLine($"продолжительность обратного рейса = {diff}, смотрим разбивку по {collNumberInRazbivka} колонке");
 
                         string timeS = ConvertStringToDate(worksheet.Cells[startAfterFirstSmena, col].Text);
                         for (int i = 29; i <= 50; i++)  // заменить индексы на такие, чтобы программа сама считала
@@ -733,7 +729,7 @@ public class BdEditor
                     
                         schetchickColonokVAzimut += 1;
                         
-                        Console.WriteLine();
+                        // Console.WriteLine();
 
                         continue;
                     }
@@ -742,7 +738,7 @@ public class BdEditor
                     int firstStart = viezdZezdVGaragePoVihodam[indexOfRowOfTimeStart] + 1;
                     for (int row = firstStart; row < middleRow; row++)
                     {
-                        Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
+                        // Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
                     }
 
                     int firstDiff = CalculateTimeDifferenceInMinutes(worksheet.Cells[firstStart, col].Text,
@@ -757,8 +753,7 @@ public class BdEditor
                         }
                     }
 
-                    Console.WriteLine(
-                        $"продолжительность рейса = {firstDiff}, смотрим разбивку по {forwardCollNumberInRazbivka} колонке");
+                    // Console.WriteLine($"продолжительность рейса = {firstDiff}, смотрим разбивку по {forwardCollNumberInRazbivka} колонке");
 
                     string timeString = ConvertStringToDate(worksheet.Cells[firstStart, col].Text);
                     for (int i = 3; i <= 26; i++)
@@ -775,12 +770,12 @@ public class BdEditor
                         tp.AppendChild(newpoint);
                     }
                     
-                    Console.WriteLine();
+                    // Console.WriteLine();
 
                     int secondStart = middleRow + 1;
                     for (int row = secondStart; row < viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd]; row++)
                     {
-                        Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
+                        // Console.WriteLine(ConvertStringToDate(worksheet.Cells[row, col].Text));
                     }
 
                     int secondDiff = CalculateTimeDifferenceInMinutes(worksheet.Cells[secondStart, col].Text,
@@ -795,8 +790,7 @@ public class BdEditor
                         }
                     }
 
-                    Console.WriteLine(
-                        $"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
+                    // Console.WriteLine($"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
 
                     
                     timeString = ConvertStringToDate(worksheet.Cells[secondStart, col].Text);
@@ -814,7 +808,7 @@ public class BdEditor
                     }
                     
                     schetchickColonokVAzimut += 1;
-                    Console.WriteLine();
+                    // Console.WriteLine();
                 }
             }
             

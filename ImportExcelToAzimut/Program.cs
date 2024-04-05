@@ -8,6 +8,7 @@ internal class Program
     static void Main() //удалить записm под номером 10_000_000 #десять миллионов
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        
 
         BdEditor bdEditor = new BdEditor();
 
@@ -39,7 +40,7 @@ internal class Program
         string workComputerDirectory = @"C:\Users\a.gavrilenko\Desktop";
         string homeComputerDirectory = @"C:\Users\kazak\OneDrive\Рабочий стол";
         
-        bdEditor.ReadExcelBook(homeComputerDirectory + @"\6 с 01.03.2024.xls", 
+        bdEditor.ReadExcelBook(workComputerDirectory + @"\6 с 01.03.2024.xls", 
             "разбивка", 
             ref list1,
             ref list2);
@@ -50,14 +51,18 @@ internal class Program
         int vihodNUmber = Convert.ToInt32(Console.ReadLine());
         Console.Write("Введите номер смены: ");
         int smenaNumber = Convert.ToInt32(Console.ReadLine());
+        Console.Write("Введите название карточки: ");
+        string cardName = Console.ReadLine();
         
         List<WPT_Route> forwardRoutes = new List<WPT_Route>();
         List<WPT_Route> backwardRoutes = new List<WPT_Route>();
         
+        bdEditor.GetPointsNames(list1, ref forwardRoutes);
+        bdEditor.GetPointsNames(list2, ref backwardRoutes);
         // XmlDocument doc = WriteXMLToAzimut(forwardRoutes, backwardRoutes);
         XmlDocument doc = new XmlDocument();
         
-        bdEditor.ReadExcelForAllTimes(homeComputerDirectory + @"\6 с 01.03.2024.xlsx", 
+        bdEditor.ReadExcelForAllTimes(workComputerDirectory + @"\6 с 01.03.2024.xlsx", 
             vihodNUmber, 
             smenaNumber, 
             forwardRoutes, 
@@ -65,7 +70,7 @@ internal class Program
             ref doc
             );
         
-        XMLWriter.WriteIntoXmlFromString(doc, homeComputerDirectory + @"\только_что.xml");
+        // XMLWriter.WriteIntoXmlFromString(doc, workComputerDirectory + @"\только_что.xml");
         
         string xmlString;
         
@@ -76,7 +81,28 @@ internal class Program
             xmlString = sw.ToString();
         }
         
-        // Console.WriteLine(xmlString);
+        string filePath = workComputerDirectory +@"\numbers.txt";
+        int itemId = ReadNumberFromFile(filePath);
+        
+        
+        // int itemId = 10_000_017;
+        
+        bdEditor.AddNewItemToXmlobjectsTable(itemId, xmlString);
+        bdEditor.AddNewItemToRoutsTable(
+            itemId, 
+            "0", 
+            "133", 
+            cardName, 
+            "6 кастомный", 
+            "1", 
+            "1", 
+            "комментарий");
+        
+        WriteNumberToFile(filePath, itemId + 1);
+        
+        Console.WriteLine();
+        Console.Write("Нажмите любую клавишу для выхода: ");
+        Console.ReadKey();
         return;
         
         // // List<WPT_Route> forwardRoutes = new List<WPT_Route>();
@@ -122,6 +148,36 @@ internal class Program
         // //     Console.Write($"{index} ");
         // // }
         // bdEditor.ReadExcelForAllTimes(@"C:\Users\a.gavrilenko\Desktop\6 с 01.03.2024.xlsx", vihodNUmber, smenaNumber);
+    }
+    
+    
+    static int ReadNumberFromFile(string filePath)
+    {
+        int number;
+        try
+        {
+            // Чтение числа из файла
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                number = int.Parse(sr.ReadLine());
+            }
+        }
+        catch (FileNotFoundException)
+        {
+            Console.WriteLine("Файл не найден. Введите число:");
+            number = int.Parse(Console.ReadLine());
+            WriteNumberToFile(filePath, number); // Запись в файл, если он не был найден
+        }
+        return number;
+    }
+    
+    static void WriteNumberToFile(string filePath, int number)
+    {
+        // Запись числа в файл
+        using (StreamWriter sw = new StreamWriter(filePath))
+        {
+            sw.WriteLine(number);
+        }
     }
     
     static XmlDocument WriteXMLToAzimut(List<WPT_Route> forwardRoutes, List<WPT_Route> backwardRoutes)
