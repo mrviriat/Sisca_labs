@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApi", "WeatherApi\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportExcelToAzimut", "ImportExcelToAzimut\ImportExcelToAzimut.csproj", "{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzimutExportClient", "AzimutExportClient\AzimutExportClient.csproj", "{599C3FB4-F12A-43B2-949F-B025811CB49D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{599C3FB4-F12A-43B2-949F-B025811CB49D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{599C3FB4-F12A-43B2-949F-B025811CB49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{599C3FB4-F12A-43B2-949F-B025811CB49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{599C3FB4-F12A-43B2-949F-B025811CB49D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -62,9 +62,11 @@ internal class Program
         // XmlDocument doc = WriteXMLToAzimut(forwardRoutes, backwardRoutes);
         XmlDocument doc = new XmlDocument();
         
-        bdEditor.ReadExcelForAllTimes(workComputerDirectory + @"\6 с 01.03.2024.xlsx", 
+        bdEditor.ReadExcelForAllTimes(
+            workComputerDirectory + @"\6 с 01.03.2024.xlsx", 
             vihodNUmber, 
             smenaNumber, 
+            cardName,
             forwardRoutes, 
             backwardRoutes,
             ref doc
@@ -94,8 +96,8 @@ internal class Program
             "133", 
             cardName, 
             "6 кастомный", 
-            "1", 
-            "1", 
+            $"{smenaNumber}", 
+            $"{vihodNUmber}", 
             "комментарий");
         
         WriteNumberToFile(filePath, itemId + 1);

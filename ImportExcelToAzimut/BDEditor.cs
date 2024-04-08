@@ -55,8 +55,16 @@ public class BdEditor
         }
     }
 
-    public void AddNewItemToRoutsTable(int itemId, string newItemValue2, string newItemValue3,
-        string newItemValue4, string newItemValue6, string newItemValue7, string newItemValue8, string newItemValue9)
+    public void AddNewItemToRoutsTable(
+        int XMLOBJ_ID,
+        string IS_ACTIVE,
+        string ROUTE_ID,
+        string ROUTE_NAME,
+        string AUXCODE_DESCNAME,
+        string SHIFTNUM,
+        string DEPARTNUM,
+        string COMMENT
+    )
     {
         using (FbConnection connection = new FbConnection(_configurationData))
         {
@@ -71,27 +79,27 @@ public class BdEditor
 
                 FbCommand command = new FbCommand(insertQuery, connection, transaction);
 
-                command.Parameters.AddWithValue("@Value1", itemId); // Добавляем параметры для каждого значения
-                command.Parameters.AddWithValue("@Value2", newItemValue2);
-                command.Parameters.AddWithValue("@Value3", newItemValue3);
-                command.Parameters.AddWithValue("@Value4", newItemValue4);
+                command.Parameters.AddWithValue("@Value1", XMLOBJ_ID); // Добавляем параметры для каждого значения
+                command.Parameters.AddWithValue("@Value2", IS_ACTIVE);
+                command.Parameters.AddWithValue("@Value3", ROUTE_ID);
+                command.Parameters.AddWithValue("@Value4", ROUTE_NAME);
                 command.Parameters.AddWithValue("@Value5", null);
-                command.Parameters.AddWithValue("@Value6", newItemValue6);
-                command.Parameters.AddWithValue("@Value7", newItemValue7);
-                command.Parameters.AddWithValue("@Value8", newItemValue8);
-                command.Parameters.AddWithValue("@Value9", newItemValue9);
+                command.Parameters.AddWithValue("@Value6", AUXCODE_DESCNAME);
+                command.Parameters.AddWithValue("@Value7", SHIFTNUM);
+                command.Parameters.AddWithValue("@Value8", DEPARTNUM);
+                command.Parameters.AddWithValue("@Value9", COMMENT);
 
                 command.ExecuteNonQuery(); // Выполняем запрос
 
                 transaction.Commit(); // Коммитим транзакцию
 
-                Console.WriteLine($"Новый элемент c ID, равным {itemId}, успешно добавлен в таблицу ITINERARIES.");
+                Console.WriteLine($"Новый элемент c ID, равным {XMLOBJ_ID}, успешно добавлен в таблицу ITINERARIES.");
             }
             catch (Exception ex) // Если возникла ошибка, откатываем транзакцию
             {
                 transaction.Rollback();
                 Console.WriteLine(
-                    $"Ошибка при добавлении нового элемента c ID, равным {itemId}, в таблицу ITINERARIES: " +
+                    $"Ошибка при добавлении нового элемента c ID, равным {XMLOBJ_ID}, в таблицу ITINERARIES: " +
                     ex.Message);
             }
         }
@@ -377,7 +385,7 @@ public class BdEditor
         int hour = int.Parse(timeParts[0]);
         string hours = timeParts[0]; // Получение часов и минут из строки
         string minutes = timeParts[1];
-        
+
         if (hours.Length == 1)
         {
             hours = $"0{hours}";
@@ -419,35 +427,40 @@ public class BdEditor
 
         return (int)difference.TotalMinutes;
     }
-    
-    
+
+
     // главная функция по сути в которой происходит сборка всего
-    public void ReadExcelForAllTimes(string filePath, int vihodNumber, int smenaNumber, List<WPT_Route> forwardRoutes, List<WPT_Route> backwardRoutes, ref XmlDocument doc)
+    public void ReadExcelForAllTimes(
+        string filePath, 
+        int vihodNumber, 
+        int smenaNumber, 
+        string cardName,
+        List<WPT_Route> forwardRoutes,
+        List<WPT_Route> backwardRoutes, ref XmlDocument doc)
     {
-        
         XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "WINDOWS-1251", null);
         doc.AppendChild(xmlDeclaration);
-        
+
         XmlElement root = doc.CreateElement("TItinerary");
-        root.SetAttribute("departnum", "1");
-        root.SetAttribute("shiftnum", "1");
-        
+        root.SetAttribute("departnum", $"{vihodNumber}");
+        root.SetAttribute("shiftnum", $"{smenaNumber}");
+
         root.SetAttribute("recalcmode", "8");
         root.SetAttribute("maxtimeoffset", "1899-12-30T01-00-00");
         root.SetAttribute("maxdtdiffneg", "1899-12-30T00-03-00");
         root.SetAttribute("maxdtdiff", "1899-12-30T00-05-00");
         root.SetAttribute("routerun", "3.7");
-        
+
         root.SetAttribute("usertripcount", "6");
-        
-        root.SetAttribute("name", "006 кастомный");
+
+        root.SetAttribute("name", cardName);
         root.SetAttribute("auxcode", "006 кастомный");
         root.SetAttribute("tripcount", "6");
         root.SetAttribute("route", "133");
         root.SetAttribute("groups", "6");
-        
+
         XmlElement rp = doc.CreateElement("rp");
-        
+
         XmlElement firstPoint = doc.CreateElement("TRoutePoint");
         firstPoint.SetAttribute("wptid", "15");
         firstPoint.SetAttribute("name", "КП КПП парка");
@@ -459,7 +472,7 @@ public class BdEditor
         for (int i = 0; i < forwardRoutes.Count; i++)
         {
             WPT_Route route = forwardRoutes[i];
-            
+
             XmlElement forwardPoint = doc.CreateElement("TRoutePoint");
             forwardPoint.SetAttribute("wptid", route.WPT_ID);
             forwardPoint.SetAttribute("name", route.WPT_NAME);
@@ -470,14 +483,14 @@ public class BdEditor
             {
                 forwardPoint.SetAttribute("usertripnew", "1");
             }
-            
+
             rp.AppendChild(forwardPoint);
         }
-        
+
         for (int i = 0; i < backwardRoutes.Count; i++)
         {
             WPT_Route route = backwardRoutes[i];
-            
+
             XmlElement backwardPoint = doc.CreateElement("TRoutePoint");
             backwardPoint.SetAttribute("wptid", route.WPT_ID);
             backwardPoint.SetAttribute("name", route.WPT_NAME);
@@ -488,10 +501,10 @@ public class BdEditor
             {
                 backwardPoint.SetAttribute("usertripnew", "1");
             }
-            
+
             rp.AppendChild(backwardPoint);
         }
-        
+
         XmlElement lastPoint = doc.CreateElement("TRoutePoint");
         lastPoint.SetAttribute("wptid", "15");
         lastPoint.SetAttribute("name", "КП КПП парка");
@@ -502,9 +515,6 @@ public class BdEditor
         root.AppendChild(rp);
 
         XmlElement tp = doc.CreateElement("tp");
-
-
-
 
 
         List<int> viezdZezdVGaragePoVihodam = ReadExcelForRotes(filePath);
@@ -546,13 +556,15 @@ public class BdEditor
 
             if (smenaNumber == 1)
             {
-                string firsttimestring = ConvertStringToDate(worksheet.Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeStart], 3].Text);
+                string firsttimestring =
+                    ConvertStringToDate(worksheet.Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeStart], 3].Text);
                 XmlElement firstpoint = doc.CreateElement("TTimePoint");
                 firstpoint.SetAttribute("routepnt", "1");
                 firstpoint.SetAttribute("trip", "0");
                 firstpoint.SetAttribute("time", firsttimestring);
                 tp.AppendChild(firstpoint);
             }
+
             // parkEndTimeRows это номера колонок, в которых автобус в исследуемом выходе заезжал в гараж. 
             // пока что код рассчитан на один заезд в гараж (parkEndTimeRows[0])
             for (int col = 3; col <= parkEndTimeRows[0]; col++)
@@ -593,17 +605,18 @@ public class BdEditor
                     for (int i = 3; i <= 26; i++)
                     {
                         DateTime time = DateTime.ParseExact(timeString, "yyyy-MM-ddTHH-mm-ss", null);
-                        time = time.AddMinutes(Convert.ToInt32(worksheetRazbivka.Cells[i, forwardCollNumberInRazbivka].Text));
+                        time = time.AddMinutes(
+                            Convert.ToInt32(worksheetRazbivka.Cells[i, forwardCollNumberInRazbivka].Text));
                         string tempTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
 
                         XmlElement newpoint = doc.CreateElement("TTimePoint");
                         // newpoint.SetAttribute("usertripnew", "1");
-                        newpoint.SetAttribute("routepnt", $"{i-1}");
+                        newpoint.SetAttribute("routepnt", $"{i - 1}");
                         newpoint.SetAttribute("trip", $"{schetchickColonokVAzimut}");
                         newpoint.SetAttribute("time", tempTime);
                         tp.AppendChild(newpoint);
                     }
-                    
+
                     if (worksheet.Cells[middleRow - 1, col].Style.Font.UnderLine)
                     {
                         // Console.WriteLine("Конец первой смены");
@@ -640,19 +653,21 @@ public class BdEditor
                     // Console.WriteLine($"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
 
                     timeString = ConvertStringToDate(worksheet.Cells[secondStart, col].Text);
-                    for (int i = 29; i <= 50; i++)  // заменить индексы на такие, чтобы программа сама считала
+                    for (int i = 29; i <= 50; i++) // заменить индексы на такие, чтобы программа сама считала
                     {
                         DateTime time = DateTime.ParseExact(timeString, "yyyy-MM-ddTHH-mm-ss", null);
-                        time = time.AddMinutes(Convert.ToInt32(worksheetRazbivka.Cells[i, backwardCollNumberInRazbivka].Text));
+                        time = time.AddMinutes(
+                            Convert.ToInt32(worksheetRazbivka.Cells[i, backwardCollNumberInRazbivka].Text));
                         string tempTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
 
                         XmlElement newpoint = doc.CreateElement("TTimePoint");
                         // newpoint.SetAttribute("usertripnew", "1");
-                        newpoint.SetAttribute("routepnt", $"{i-3}");
+                        newpoint.SetAttribute("routepnt", $"{i - 3}");
                         newpoint.SetAttribute("trip", $"{schetchickColonokVAzimut}");
                         newpoint.SetAttribute("time", tempTime);
                         tp.AppendChild(newpoint);
                     }
+
                     if (worksheet.Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd] - 1, col].Style.Font.UnderLine)
                     {
                         // Console.WriteLine("Конец первой смены");
@@ -714,21 +729,22 @@ public class BdEditor
                         // Console.WriteLine($"продолжительность обратного рейса = {diff}, смотрим разбивку по {collNumberInRazbivka} колонке");
 
                         string timeS = ConvertStringToDate(worksheet.Cells[startAfterFirstSmena, col].Text);
-                        for (int i = 29; i <= 50; i++)  // заменить индексы на такие, чтобы программа сама считала
+                        for (int i = 29; i <= 50; i++) // заменить индексы на такие, чтобы программа сама считала
                         {
                             DateTime time = DateTime.ParseExact(timeS, "yyyy-MM-ddTHH-mm-ss", null);
-                            time = time.AddMinutes(Convert.ToInt32(worksheetRazbivka.Cells[i, collNumberInRazbivka].Text));
+                            time = time.AddMinutes(
+                                Convert.ToInt32(worksheetRazbivka.Cells[i, collNumberInRazbivka].Text));
                             string tempTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
 
                             XmlElement newpoint = doc.CreateElement("TTimePoint");
-                            newpoint.SetAttribute("routepnt", $"{i-3}");
+                            newpoint.SetAttribute("routepnt", $"{i - 3}");
                             newpoint.SetAttribute("trip", $"{schetchickColonokVAzimut}");
                             newpoint.SetAttribute("time", tempTime);
                             tp.AppendChild(newpoint);
                         }
-                    
+
                         schetchickColonokVAzimut += 1;
-                        
+
                         // Console.WriteLine();
 
                         continue;
@@ -759,17 +775,18 @@ public class BdEditor
                     for (int i = 3; i <= 26; i++)
                     {
                         DateTime time = DateTime.ParseExact(timeString, "yyyy-MM-ddTHH-mm-ss", null);
-                        time = time.AddMinutes(Convert.ToInt32(worksheetRazbivka.Cells[i, forwardCollNumberInRazbivka].Text));
+                        time = time.AddMinutes(
+                            Convert.ToInt32(worksheetRazbivka.Cells[i, forwardCollNumberInRazbivka].Text));
                         string tempTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
 
                         XmlElement newpoint = doc.CreateElement("TTimePoint");
                         // newpoint.SetAttribute("usertripnew", "1");
-                        newpoint.SetAttribute("routepnt", $"{i-1}");
+                        newpoint.SetAttribute("routepnt", $"{i - 1}");
                         newpoint.SetAttribute("trip", $"{schetchickColonokVAzimut}");
                         newpoint.SetAttribute("time", tempTime);
                         tp.AppendChild(newpoint);
                     }
-                    
+
                     // Console.WriteLine();
 
                     int secondStart = middleRow + 1;
@@ -792,29 +809,31 @@ public class BdEditor
 
                     // Console.WriteLine($"продолжительность обратного рейса = {secondDiff}, смотрим разбивку по {backwardCollNumberInRazbivka} колонке");
 
-                    
+
                     timeString = ConvertStringToDate(worksheet.Cells[secondStart, col].Text);
-                    for (int i = 29; i <= 50; i++)  // заменить индексы на такие, чтобы программа сама считала
+                    for (int i = 29; i <= 50; i++) // заменить индексы на такие, чтобы программа сама считала
                     {
                         DateTime time = DateTime.ParseExact(timeString, "yyyy-MM-ddTHH-mm-ss", null);
-                        time = time.AddMinutes(Convert.ToInt32(worksheetRazbivka.Cells[i, backwardCollNumberInRazbivka].Text));
+                        time = time.AddMinutes(
+                            Convert.ToInt32(worksheetRazbivka.Cells[i, backwardCollNumberInRazbivka].Text));
                         string tempTime = time.ToString("yyyy-MM-ddTHH-mm-ss");
 
                         XmlElement newpoint = doc.CreateElement("TTimePoint");
-                        newpoint.SetAttribute("routepnt", $"{i-3}");
+                        newpoint.SetAttribute("routepnt", $"{i - 3}");
                         newpoint.SetAttribute("trip", $"{schetchickColonokVAzimut}");
                         newpoint.SetAttribute("time", tempTime);
                         tp.AppendChild(newpoint);
                     }
-                    
+
                     schetchickColonokVAzimut += 1;
                     // Console.WriteLine();
                 }
             }
-            
+
             if (smenaNumber == 2)
             {
-                string lasttimestring = ConvertStringToDate(worksheet.Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd], parkEndTimeRows[0]].Text);
+                string lasttimestring = ConvertStringToDate(worksheet
+                    .Cells[viezdZezdVGaragePoVihodam[indexOfRowOfTimeEnd], parkEndTimeRows[0]].Text);
                 XmlElement lasttpoint = doc.CreateElement("TTimePoint");
                 lasttpoint.SetAttribute("routepnt", $"{1 + forwardRoutes.Count + backwardRoutes.Count + 1}");
                 lasttpoint.SetAttribute("trip", $"{schetchickColonokVAzimut - 1}");
@@ -822,9 +841,8 @@ public class BdEditor
                 tp.AppendChild(lasttpoint);
             }
             // тут нужно закрыть xml документ
-            
         }
-        
+
         root.AppendChild(tp);
 
         doc.AppendChild(root);
