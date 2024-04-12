@@ -10,7 +10,28 @@ internal class Program
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         
 
-        BdEditor bdEditor = new BdEditor();
+        var bdEditor = new BdEditor();
+        
+        string request = $"";
+        
+        // response = $"DELETE FROM XMLOBJECTS WHERE XMLOBJ_ID = 10000000";
+        // bdEditor.ReadtFromTbaleWithCustomResponse(response);
+        
+        // XMLOBJ_ID: 10000026 
+        // XMLOBJ_XMLCLS_ID: 1            
+        // XMLOBJ_XMLCLS_NAME: TItinerary 
+        // XMLOBJ_DELETED: 0              
+        // XMLOBJ_CHNG_DT: 21.03.2024 12:40:05   
+        // XMLOBJ_CREATE_DT: 21.03.2024 12:40:05 
+        // XMLOBJ_WHO: AZ_USER                   
+        // XMLOBJ_TRIGGEROFF: 0                  
+        // XMLOBJ_XML: <?xml version="1.0" encoding="WINDOWS-1251"?>...
+        
+        request = $"SELECT FIRST 40 XMLOBJ_ID, XMLOBJ_CREATE_DT, XMLOBJ_CHNG_DT FROM XMLOBJECTS ORDER BY XMLOBJ_ID DESC";
+        bdEditor.ReadtFromTbaleWithCustomRequest(request);
+        
+        return;
+        
 
         // int itemId = 10_000_001;
         // string xmlString = "<?xml version=\"1.0\" encoding=\"windows-1251\"?>\n<TItinerary active=\"0\" groups=\"14\" route=\"351\" tripcount=\"6\" name=\"name777\" routerun=\"10.4\" maxdtdiff=\"1899-12-30T00-05-00\" maxdtdiffneg=\"1899-12-30T00-03-00\" maxtimeoffset=\"1899-12-30T01-00-00\" recalcmode=\"8\" auxcode=\"auxcodeдо 30.06.2014 910.03.02.12345\" shiftnum=\"2\" departnum=\"3\" usertripcount=\"13\">\n</TItinerary>";
@@ -85,7 +106,6 @@ internal class Program
         
         string filePath = workComputerDirectory +@"\numbers.txt";
         int itemId = ReadNumberFromFile(filePath);
-        
         
         // int itemId = 10_000_017;
         

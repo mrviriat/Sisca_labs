@@ -7,26 +7,36 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        <ListBox Name="myListBox" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="0">
+
+        <ListBox
+            Name="myListBox"
+            Background="Aquamarine"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Height="200">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding WPT_ID}" Margin="5"/>
-                        <TextBlock Text="{Binding WPT_NAME}" Margin="5"/>
+                        <TextBlock
+                            Background="Red"
+                            Text="{Binding WPT_ID}"
+                            Margin="5" />
+                        <TextBlock
+                            Background="Red"
+                            Text="{Binding WPT_NAME}"
+                            Margin="5" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="5">
-            <TextBox x:Name="textBoxWPT_ID" Width="100" Margin="5"/>
-            <TextBox x:Name="textBoxWPT_NAME" Width="100" Margin="5"/>
-            <Button Content="Добавить" Click="Button_Click"/>
+
+        <StackPanel
+            Orientation="Horizontal"
+            Margin="5"
+            Height="200">
+            <TextBox x:Name="textBoxWPT_NAME" Width="100" Margin="5" />
+            <Button Content="Добавить" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </Window>

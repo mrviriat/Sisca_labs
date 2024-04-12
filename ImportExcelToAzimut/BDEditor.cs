@@ -105,6 +105,40 @@ public class BdEditor
         }
     }
 
+    public void ReadtFromTbaleWithCustomRequest(string response)
+    {
+        using (FbConnection connection = new FbConnection(_configurationData))
+        {
+            connection.Open();
+
+            FbTransaction transaction = connection.BeginTransaction();
+            try
+            {
+                FbCommand command = new FbCommand(response, connection, transaction);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read()) // Выводим значения всех столбцов данной строки
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            Console.Write($"{reader.GetName(i)}: {reader[i]}; ");
+                        }
+                        Console.WriteLine();
+                    }
+                }
+            }
+            catch (Exception ex) // Если возникла ошибка, откатываем транзакцию
+            {
+                transaction.Rollback();
+                Console.WriteLine($"Ошибка при чтении по запросу {response}: " + ex.Message);
+                return;
+            }
+
+            transaction.Commit();
+        }
+    }
+
     public void ReadtFromTbaleByColumnName(string tableName, string columnName, int columnValue)
     {
         using (FbConnection connection = new FbConnection(_configurationData))
@@ -431,9 +465,9 @@ public class BdEditor
 
     // главная функция по сути в которой происходит сборка всего
     public void ReadExcelForAllTimes(
-        string filePath, 
-        int vihodNumber, 
-        int smenaNumber, 
+        string filePath,
+        int vihodNumber,
+        int smenaNumber,
         string cardName,
         List<WPT_Route> forwardRoutes,
         List<WPT_Route> backwardRoutes, ref XmlDocument doc)
