@@ -5,38 +5,247 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AzimutExportClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1200">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <ListBox
-            Name="myListBox"
-            Background="Aquamarine"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Height="200">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            Background="Red"
-                            Text="{Binding WPT_ID}"
-                            Margin="5" />
-                        <TextBlock
-                            Background="Red"
-                            Text="{Binding WPT_NAME}"
-                            Margin="5" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid Grid.Row="0" Background="Gray" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid Grid.Column="0" Margin="15,5,0,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <StackPanel 
+                    Grid.Row="0" 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="0, 5, 0, 0">
+                        Номер рейса:
+                    </TextBlock>
+                    <TextBox 
+                        VerticalAlignment="Bottom"
+                        FontSize="18"
+                        Width="120"
+                        VerticalContentAlignment="Center"
+                        Margin="10, 0, 0, 0"/>
+                </StackPanel>
+                
+                <StackPanel 
+                    Grid.Row="1" 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"      >
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="0, 5, 0, 0">
+                        Номер смены:
+                    </TextBlock>
+                    <TextBox 
+                        FontSize="18"
+                        Width="120"
+                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="10, 0, 0, 0"/>
+                </StackPanel>
+                
+                <StackPanel 
+                    Grid.Row="2" 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+                    <TextBlock VerticalAlignment="Center" FontSize="20" Margin="0, 5, 0, 0">
+                        Путь к файлу с расписанием:
+                    </TextBlock>
+                    <TextBox 
+                        FontSize="18"
+                        Width="120"
+                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="10, 0, 0, 0"/>
+                </StackPanel>
+                
+                <!-- <TextBlock  -->
+                <!--     Grid.Row="1"  -->
+                <!--     FontSize="20" -->
+                <!--     HorizontalAlignment="Right"> -->
+                <!--     Номер смены: -->
+                <!-- </TextBlock> -->
+                <!-- <TextBlock  -->
+                <!--     Grid.Row="2"  -->
+                <!--     FontSize="20" -->
+                <!--     HorizontalAlignment="Right"> -->
+                <!--     Дни недели расписания: -->
+                <!-- </TextBlock> -->
+                <!-- <TextBlock  -->
+                <!--     Grid.Row="3"  -->
+                <!--     FontSize="20" -->
+                <!--     HorizontalAlignment="Right"> -->
+                <!--     Путь к файлу с расписанием: -->
+                <!-- </TextBlock> -->
+            </Grid>
+            
+            <Grid Grid.Column="1" VerticalAlignment="Center" Margin="20, 0, 0, 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" FontSize="20">
+                        Дни недели расписания:
+                    </TextBlock>
+                    <ComboBox
+                        Width="120"
+                        VerticalAlignment="Center"
+                        Margin="10, 0, 0, 0"
+                        FontSize="18">
+                        <ComboBoxItem Content="Будние"/>
+                        <ComboBoxItem Content="Выходные"/>
+                    </ComboBox>
+                </StackPanel>
+                <Button 
+                    Grid.Row="1" 
+                    Content="Сформировать расписание" 
+                    FontSize="18" 
+                    Margin="0, 10, 0, 0"
+                    VerticalContentAlignment="Center"
+                    Padding="0, 2, 0, 2"
+                    >
+                </Button>
+            </Grid>
+            
+            <!-- <Grid Grid.Column="1" Margin="10,5,0,5"> -->
+            <!--     <Grid.RowDefinitions> -->
+            <!--         <RowDefinition Height="*" /> -->
+            <!--         <RowDefinition Height="*" /> -->
+            <!--         <RowDefinition Height="*" /> -->
+            <!--         <RowDefinition Height="*" /> -->
+            <!--     </Grid.RowDefinitions> -->
+            <!--      -->
+            <!--     <TextBox  -->
+            <!--         Grid.Row="0"  -->
+            <!--         FontSize="20" -->
+            <!--         Width="100" -->
+            <!--         VerticalContentAlignment="Center"/> -->
+            <!--      -->
+            <!--     <TextBox  -->
+            <!--         Grid.Row="1"  -->
+            <!--         FontSize="20" -->
+            <!--         Width="100" -->
+            <!--         VerticalContentAlignment="Center"/> -->
+            <!--      -->
+            <!--     <ComboBox Grid.Row="2" > -->
+            <!--         <ComboBoxItem Content="Будние" /> -->
+            <!--         <ComboBoxItem Content="Выходные" /> -->
+            <!--     </ComboBox> -->
+            <!-- -->
+            <!--     <TextBox  -->
+            <!--         Grid.Row="3"  -->
+            <!--         FontSize="20" -->
+            <!--         Width="100" -->
+            <!--         VerticalContentAlignment="Center"/> -->
+            <!-- </Grid> -->
+            
+            
+            
+        </Grid>
+
+        <Grid Grid.Row="1" Opacity="0.6" IsHitTestVisible="False">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Background="Red">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
 
-        <StackPanel
-            Orientation="Horizontal"
-            Margin="5"
-            Height="200">
-            <TextBox x:Name="textBoxWPT_NAME" Width="100" Margin="5" />
-            <Button Content="Добавить" Click="Button_Click" />
-        </StackPanel>
+                <ListBox
+                    Grid.Row="0"
+                    Name="routesForBuildingTemplate"
+                    Background="Aquamarine"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Margin="15,5,5,5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Background="Red"
+                                    Text="{Binding WPT_ID}"
+                                    Margin="5" />
+                                <TextBlock
+                                    Background="Red"
+                                    Text="{Binding WPT_NAME}"
+                                    Margin="5" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+
+                <Grid
+                    Grid.Row="1"
+                    Background="Orange"
+                    Margin="0 5 0 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        Grid.Column="0"
+                        Margin="15 0 5 0" 
+                        VerticalContentAlignment="Center"
+                        />
+                    <Button
+                        Grid.Column="1"
+                        FontSize="20"
+                        Content="Добавить"
+                        Padding="0, 5, 0, 5"
+                        Margin="5 0 5 0" />
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1" Background="SandyBrown">
+                <ListBox
+                    Name="allRoutesFromDataBase"
+                    Background="CadetBlue"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Margin="5,5,15,5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Background="Red"
+                                    Text="{Binding WPT_ID}"
+                                    Margin="5" />
+                                <TextBlock
+                                    Background="Red"
+                                    Text="{Binding WPT_NAME}"
+                                    Margin="5" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            
+        </Grid>
+
     </Grid>
+
 </Window>

@@ -43,7 +43,8 @@ public partial class MainWindow : Window
         };
 
         // Привязка списка к ListBox
-        myListBox.ItemsSource = routes;
+        routesForBuildingTemplate.ItemsSource = routes;
+        allRoutesFromDataBase.ItemsSource = routes;
     }
 
     public class WPT_Route
