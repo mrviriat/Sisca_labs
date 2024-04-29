@@ -109,7 +109,7 @@ public class BdEditor
 
     public List<WPT_Route> ReadtFromTbaleWithCustomRequest(string response)
     {
-        List<WPT_Route> routes = new List<WPT_Route> { };
+        List<WPT_Route> routes = [];
         
         using (FbConnection connection = new FbConnection(_configurationData))
         {
@@ -136,6 +136,35 @@ public class BdEditor
             }
 
             transaction.Commit();
+        }
+
+        return routes;
+    }
+    
+    public List<WPT_Route> GetAllWptPoints()
+    {
+        const string request = "SELECT WPT_ID, WPT_NAME, WPT_TAG FROM WPT WHERE WPT_TAG = 1 ORDER BY WPT_NAME";
+        List<WPT_Route> routes = [];
+
+        using var connection = new FbConnection(_configurationData);
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
+        
+        try {
+            var command = new FbCommand(request, connection, transaction);
+
+            using var reader = command.ExecuteReader();
+            
+            while (reader.Read()) {
+                routes.Add(new WPT_Route(
+                    $"{reader[0]}", 
+                    CultureInfo.CurrentCulture.TextInfo.ToTitleCase($"{reader[1]}"))
+                );
+            }
+        }
+        catch (Exception ex) {
+            Console.WriteLine($"Ошибка при чтении по запросу {request}: " + ex.Message);
         }
 
         return routes;

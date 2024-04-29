@@ -110,6 +110,7 @@
                         Номер рейса:
                     </TextBlock>
                     <TextBox 
+                        Name="VihodNUmber"
                         VerticalAlignment="Bottom"
                         FontSize="18"
                         Width="120"
@@ -125,6 +126,7 @@
                         Номер смены:
                     </TextBlock>
                     <TextBox 
+                        Name="SmenaNumber"
                         FontSize="18"
                         Width="120"
                         VerticalContentAlignment="Center"
@@ -165,6 +167,7 @@
                         Дни недели расписания:
                     </TextBlock>
                     <ComboBox
+                        Name="DaysTypeComboBox"
                         Width="120"
                         VerticalAlignment="Center"
                         Margin="10, 0, 0, 0"
@@ -182,7 +185,7 @@
                     Margin="0, 10, 0, 0"
                     Height="35"
                     Content="Сформировать расписание" 
-                    Click="startCreatePass">
+                    Click="StartCreatePass">
                 </Button>
             </Grid>
         </Grid>
