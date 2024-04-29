@@ -16,4 +16,12 @@
       <Resource Include="Fonts\PTSerif-Regular.ttf" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ImportExcelToAzimut\ImportExcelToAzimut.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.0.0" />
+    </ItemGroup>
+
 </Project>

@@ -27,10 +27,11 @@ internal class Program
         // XMLOBJ_TRIGGEROFF: 0                  
         // XMLOBJ_XML: <?xml version="1.0" encoding="WINDOWS-1251"?>...
         
-        request = $"SELECT FIRST 40 XMLOBJ_ID, XMLOBJ_CREATE_DT, XMLOBJ_CHNG_DT FROM XMLOBJECTS ORDER BY XMLOBJ_ID DESC";
-        bdEditor.ReadtFromTbaleWithCustomRequest(request);
-        
-        return;
+        // request = $"SELECT ROUTE_ID, ROUTE_NAME FROM ROUTES ORDER BY ROUTE_NAME";
+        // // request = $"SELECT FIRST 40 XMLOBJ_ID, XMLOBJ_CREATE_DT, XMLOBJ_CHNG_DT FROM XMLOBJECTS ORDER BY XMLOBJ_ID DESC";
+        // bdEditor.ReadtFromTbaleWithCustomRequest(request);
+        //
+        // return;
         
 
         // int itemId = 10_000_001;
@@ -120,7 +121,7 @@ internal class Program
             $"{vihodNUmber}", 
             "комментарий");
         
-        WriteNumberToFile(filePath, itemId + 1);
+        WriteNumberToFile(filePath, itemId + 2);
         
         Console.WriteLine();
         Console.Write("Нажмите любую клавишу для выхода: ");
