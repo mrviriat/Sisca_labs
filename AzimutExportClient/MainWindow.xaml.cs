@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace AzimutExportClient;
 
@@ -62,5 +63,25 @@ public partial class MainWindow : Window
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         throw new NotImplementedException();
+    }
+
+    public string FilePath = "";
+    
+    private void OpenFile_Click(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "All files (*.*)|*.*";
+        if (openFileDialog.ShowDialog() == true)
+        {
+            FilePath = openFileDialog.FileName;
+            Console.WriteLine(FilePath);
+            FilePathTextBlock.Text = FilePath;
+        }
+    }
+    
+    private void startCreatePass(object sender, RoutedEventArgs e)
+    {
+        ListsGrid.Opacity = 1;
+        ListsGrid.IsHitTestVisible = true;
     }
 }

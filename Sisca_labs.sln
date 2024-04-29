@@ -3,19 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33927.249
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab_RAM", "Lab_RAM\Lab_RAM.csproj", "{93214D91-3E08-4FD2-9FCD-280D3A0C2789}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyLib", "MyLib\MyLib.csproj", "{B4A2C8B4-000B-44D8-B412-958976C1BF99}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab_Registry", "Lab_Registry\Lab_Registry.csproj", "{EF4B3E10-A22E-492E-BF51-0051B906EF54}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab_dll", "Lab_dll\Lab_dll.csproj", "{5D1C7AC5-8302-4BB9-B646-6FA94AA1E549}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibrary", "ClassLibrary\ClassLibrary.csproj", "{08E0266F-47A9-454B-9E8F-A80C22144CB1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectToTemperatureDatabase", "ConnectToTemperatureDatabase\ConnectToTemperatureDatabase.csproj", "{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApi", "WeatherApi\WeatherApi.csproj", "{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportExcelToAzimut", "ImportExcelToAzimut\ImportExcelToAzimut.csproj", "{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}"
 EndProject
@@ -27,34 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93214D91-3E08-4FD2-9FCD-280D3A0C2789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93214D91-3E08-4FD2-9FCD-280D3A0C2789}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93214D91-3E08-4FD2-9FCD-280D3A0C2789}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93214D91-3E08-4FD2-9FCD-280D3A0C2789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4A2C8B4-000B-44D8-B412-958976C1BF99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4A2C8B4-000B-44D8-B412-958976C1BF99}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4A2C8B4-000B-44D8-B412-958976C1BF99}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4A2C8B4-000B-44D8-B412-958976C1BF99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF4B3E10-A22E-492E-BF51-0051B906EF54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF4B3E10-A22E-492E-BF51-0051B906EF54}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF4B3E10-A22E-492E-BF51-0051B906EF54}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF4B3E10-A22E-492E-BF51-0051B906EF54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D1C7AC5-8302-4BB9-B646-6FA94AA1E549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D1C7AC5-8302-4BB9-B646-6FA94AA1E549}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D1C7AC5-8302-4BB9-B646-6FA94AA1E549}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D1C7AC5-8302-4BB9-B646-6FA94AA1E549}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08E0266F-47A9-454B-9E8F-A80C22144CB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08E0266F-47A9-454B-9E8F-A80C22144CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08E0266F-47A9-454B-9E8F-A80C22144CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08E0266F-47A9-454B-9E8F-A80C22144CB1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7077BDCC-233A-49D5-8D0A-BC5DCE17C08D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA8E8B8A-6D5E-438A-AAA1-5FE555FBD4FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43F549DE-2C6C-4EC0-92DB-822E12DDFE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
