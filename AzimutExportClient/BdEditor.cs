@@ -107,38 +107,29 @@ public class BdEditor
         }
     }
 
-    public List<WPT_Route> ReadtFromTbaleWithCustomRequest(string response)
+    public void ReadtFromTbaleWithCustomRequest(string request)
     {
-        List<WPT_Route> routes = [];
+        using var connection = new FbConnection(_configurationData);
+        connection.Open();
+
+        using var transaction = connection.BeginTransaction();
         
-        using (FbConnection connection = new FbConnection(_configurationData))
-        {
-            connection.Open();
+        try {
+            var command = new FbCommand(request, connection, transaction);
 
-            FbTransaction transaction = connection.BeginTransaction();
-            try
-            {
-                FbCommand command = new FbCommand(response, connection, transaction);
-
-                using (var reader = command.ExecuteReader())
+            using var reader = command.ExecuteReader();
+            
+            while (reader.Read()) {
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    while (reader.Read()) // Выводим значения всех столбцов данной строки
-                    {
-                        routes.Add(new WPT_Route($"{reader[0]}", CultureInfo.CurrentCulture.TextInfo.ToTitleCase($"{reader[1]}")));
-                    }
+                    Console.Write($"{reader.GetName(i)}: {reader[i]}; ");
                 }
+                Console.WriteLine();
             }
-            catch (Exception ex) // Если возникла ошибка, откатываем транзакцию
-            {
-                transaction.Rollback();
-                Console.WriteLine($"Ошибка при чтении по запросу {response}: " + ex.Message);
-                return null;
-            }
-
-            transaction.Commit();
         }
-
-        return routes;
+        catch (Exception ex) {
+            Console.WriteLine($"Ошибка при чтении по запросу {request}: " + ex.Message);
+        }
     }
     
     public List<WPT_Route> GetAllWptPoints()
@@ -507,6 +498,7 @@ public class BdEditor
         doc.AppendChild(xmlDeclaration);
 
         XmlElement root = doc.CreateElement("TItinerary");
+        
         root.SetAttribute("departnum", $"{vihodNumber}");
         root.SetAttribute("shiftnum", $"{smenaNumber}");
 
@@ -519,11 +511,12 @@ public class BdEditor
         root.SetAttribute("usertripcount", "6");
 
         root.SetAttribute("name", cardName);
-        root.SetAttribute("auxcode", "006 кастомный");
+        root.SetAttribute("auxcode", cardName);
         root.SetAttribute("tripcount", "6");
         root.SetAttribute("route", "133");
-        root.SetAttribute("groups", "6");
-
+        root.SetAttribute("groups", "14");
+        root.SetAttribute("active", "0");
+        
         XmlElement rp = doc.CreateElement("rp");
 
         XmlElement firstPoint = doc.CreateElement("TRoutePoint");

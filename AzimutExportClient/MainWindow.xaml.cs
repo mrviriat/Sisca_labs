@@ -15,6 +15,8 @@ public partial class MainWindow : Window
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         
         InitializeComponent();
+        
+        // _bdEditor.ReadtFromTbaleWithCustomRequest("SELECT * FROM ITINERARIES WHERE ITIN_XMLOBJ_ID = 10000042");
     }
     
     private void OpenFile_Click(object sender, RoutedEventArgs e)
